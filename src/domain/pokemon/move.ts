@@ -11,3 +11,8 @@ export interface Move {
   accuracy: number | null;
   priority: number;
 }
+
+// Check if valid moveset (between 1 and 4)
+export function isValidMoveSet(moves: Move[]): boolean {
+  return moves.length >= 1 && moves.length <= 4;
+}
