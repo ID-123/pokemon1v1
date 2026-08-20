@@ -1,3 +1,14 @@
+export const STATS = {
+  HP: "hp",
+  ATTACK: "attack",
+  DEFENSE: "defense",
+  SPECIAL_ATTACK: "specialAttack",
+  SPECIAL_DEFENSE: "specialDefense",
+  SPEED: "speed",
+} as const;
+
+export type StatName = (typeof STATS)[keyof typeof STATS];
+
 export interface Stats {
   hp: number;
   attack: number;
@@ -7,16 +18,7 @@ export interface Stats {
   speed: number;
 }
 
-export type BaseStats = Stats
-export type IVs = Stats
-export type EVs = Stats
-export type FinalStats = Stats
-
-export const pikachuBaseStats: BaseStats = {
-    hp: 35,
-    attack: 55,
-    defense: 40,
-    specialAttack: 50,
-    specialDefense: 50,
-    speed: 90
-}
+export type BaseStats = Stats;
+export type IVs = Stats;
+export type EVs = Stats;
+export type FinalStats = Stats;

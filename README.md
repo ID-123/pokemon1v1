@@ -498,7 +498,7 @@ Es preferible una limitación explícita a un resultado incorrecto.
 
 ## Sprint 1 — Domain Model
 
-- [ ] Definir tipos e interfaces
+- [x] Definir tipos e interfaces
 - [ ] Modelar Stats
 - [ ] Modelar IVs
 - [ ] Modelar EVs
