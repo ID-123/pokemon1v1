@@ -1,4 +1,4 @@
-import type { EVs, IVs } from "./stats";
+import type { EVs, IVs, BaseStats } from "./stats";
 
 export const STAT_LIMITS = {
   iv: {
@@ -46,4 +46,8 @@ export function isValidEVs(evs: EVs): boolean {
 
 export function isValidLevel(level: number): boolean {
   return isValidIntegerInRange(level, LEVEL_LIMITS.min, LEVEL_LIMITS.max);
+}
+
+export function calculateBST(stats: BaseStats): number {
+  return Object.values(stats).reduce((total, value) => total + value, 0);
 }
