@@ -1,11 +1,6 @@
 import { type BaseStats, type StatName, STATS } from "./stats";
-import { calculateBST } from "./stats-rules";
+import { calculateBST, RANDOM_BASE_STAT_LIMITS } from "./stats-rules";
 
-// Set value limit per stat
-const RANDOM_BASE_STAT_LIMITS = {
-  min: 15,
-  max: 255,
-} as const;
 
 const STAT_COUNT = Object.keys(STATS).length;
 

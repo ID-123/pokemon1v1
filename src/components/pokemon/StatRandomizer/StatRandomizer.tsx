@@ -1,22 +1,19 @@
 import { useState } from "react";
-
+import type { PokemonSpecies } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
   isValidBaseStats,
+  isValidBST,
   randomizeBST,
   type BaseStats,
   type StatName,
 } from "@/domain/pokemon";
+import StatInput from "./StatInput";
 
-const DEFAULT_STATS: BaseStats = {
-  hp: 120,
-  attack: 120,
-  defense: 120,
-  specialAttack: 120,
-  specialDefense: 120,
-  speed: 120,
-};
+interface StatRandomizerProps {
+  pokemon: PokemonSpecies;
+}
 
 const STAT_FIELDS: {
   key: StatName;
@@ -30,11 +27,17 @@ const STAT_FIELDS: {
   { key: "speed", label: "Speed" },
 ];
 
-function StatRandomizer() {
-  const [stats, setStats] = useState<BaseStats>(DEFAULT_STATS);
+// function StatRandomizer({ pokemon,}: StatRandomizerProps) {
+function StatRandomizer({ pokemon }: StatRandomizerProps) {
+  const [stats, setStats] = useState<BaseStats>(pokemon.baseStats);
 
   const bst = calculateBST(stats);
+  const maxBST = calculateBST(pokemon.baseStats);
+
   const statsAreValid = isValidBaseStats(stats);
+  const bstIsValid = isValidBST(bst, maxBST);
+
+  const configurationIsValid = statsAreValid && bstIsValid;
 
   function handleStatChange(stat: StatName, value: string) {
     const numericValue = Number(value);
@@ -46,11 +49,14 @@ function StatRandomizer() {
   }
 
   function handleRandomize() {
+    if (!configurationIsValid) {
+      return;
+    }
     setStats(randomizeBST(stats));
   }
 
   function handleReset() {
-    setStats(DEFAULT_STATS);
+    setStats(pokemon.baseStats);
   }
 
   return (
@@ -66,13 +72,29 @@ function StatRandomizer() {
 
       <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-400">BST</span>
+          <div>
+            <span className="text-sm text-slate-400">BST</span>
 
-          <span className="text-2xl font-bold">{bst}</span>
+            <p className="text-xs text-slate-500">{pokemon.name}</p>
+          </div>
+
+          <span
+            className={`text-2xl font-bold ${
+              bstIsValid ? "text-white" : "text-red-400"
+            }`}
+          >
+            {bst} / {maxBST}
+          </span>
         </div>
 
+        {!bstIsValid && (
+          <p className="mt-3 text-sm text-red-400">
+            ⚠ Las estadísticas superan el BST permitido para {pokemon.name}.
+          </p>
+        )}
+
         <p className="mt-2 text-xs text-slate-500">
-          Base Stats permitidas: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
+          Cada stat: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
         </p>
       </div>
 
@@ -86,44 +108,28 @@ function StatRandomizer() {
             value <= BASE_STAT_LIMITS.max;
 
           return (
-            <label key={stat.key} className="flex flex-col gap-2">
-              <span className="text-sm font-medium">{stat.label}</span>
-
-              <input
-                type="number"
-                min={BASE_STAT_LIMITS.min}
-                max={BASE_STAT_LIMITS.max}
-                step={1}
-                value={value}
-                onChange={(event) =>
-                  handleStatChange(stat.key, event.target.value)
-                }
-                className={`rounded-lg border bg-slate-800 px-3 py-2 outline-none transition ${
-                  isValid
-                    ? "border-slate-600 focus:border-blue-500"
-                    : "border-red-500"
-                }`}
-              />
-
-              <span className="text-xs text-slate-500">
-                Rango: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
-              </span>
-
-              {!isValid && (
-                <span className="text-xs text-red-400">
-                  Debe ser un entero entre {BASE_STAT_LIMITS.min} y{" "}
-                  {BASE_STAT_LIMITS.max}.
-                </span>
-              )}
-            </label>
+            <StatInput
+              key={stat.key}
+              label={stat.label}
+              value={value}
+              min={BASE_STAT_LIMITS.min}
+              max={BASE_STAT_LIMITS.max}
+              error={
+                isValid
+                  ? undefined
+                  : `Debe ser un entero entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`
+              }
+              onChange={(value) => handleStatChange(stat.key, value)}
+            />
           );
         })}
+              
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={!statsAreValid}
+          disabled={!configurationIsValid}
           onClick={handleRandomize}
           className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
         >

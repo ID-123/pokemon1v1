@@ -16,6 +16,15 @@ export const BASE_STAT_LIMITS = {
   max: 255,
 } as const;
 
+export const RANDOM_BASE_STAT_LIMITS = {
+  min: 15,
+  max: 255,
+} as const;
+
+export const BST_LIMITS = {
+  min: RANDOM_BASE_STAT_LIMITS.min * 6,
+} as const;
+
 export const TOTAL_EV_LIMIT = 510;
 
 export const LEVEL_LIMITS = {
@@ -53,8 +62,8 @@ export function isValidBaseStats(stats: BaseStats): boolean {
   return Object.values(stats).every(
     (value) =>
       Number.isInteger(value) &&
-    value >= BASE_STAT_LIMITS.min &&
-    value <= BASE_STAT_LIMITS.max,
+      value >= BASE_STAT_LIMITS.min &&
+      value <= BASE_STAT_LIMITS.max,
   );
 }
 
@@ -64,4 +73,8 @@ export function calculateBST(stats: BaseStats): number {
 
 export function calculateEVTotal(evs: EVs): number {
   return Object.values(evs).reduce((sum, value) => sum + value, 0);
+}
+
+export function isValidBST(bst: number, maxBST: number): boolean {
+  return Number.isInteger(bst) && bst >= BST_LIMITS.min && bst <= maxBST;
 }
