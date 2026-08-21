@@ -1,13 +1,11 @@
-import { useState } from "react";
-import type { PokemonSpecies } from "@/domain/pokemon";
+import useStats from "./hooks/useStats";
+import type { PokemonSpecies, IVs, EVs, BaseStats, StatName } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
   isValidBaseStats,
   isValidBST,
   randomizeBST,
-  type BaseStats,
-  type StatName,
 } from "@/domain/pokemon";
 import StatInput from "./StatInput";
 
@@ -26,37 +24,37 @@ const STAT_FIELDS: {
   { key: "specialDefense", label: "Special Defense" },
   { key: "speed", label: "Speed" },
 ];
+/*
+const DEFAULT_IVS: IVs = {
+  hp: 31,
+  attack: 31,
+  defense: 31,
+  specialAttack: 31,
+  specialDefense: 31,
+  speed: 31,
+};
+*/
 
-// function StatRandomizer({ pokemon,}: StatRandomizerProps) {
 function StatRandomizer({ pokemon }: StatRandomizerProps) {
-  const [stats, setStats] = useState<BaseStats>(pokemon.baseStats);
+
+  const { stats, updateStat, reset } = useStats(pokemon.baseStats);
 
   const bst = calculateBST(stats);
   const maxBST = calculateBST(pokemon.baseStats);
 
   const statsAreValid = isValidBaseStats(stats);
   const bstIsValid = isValidBST(bst, maxBST);
-
   const configurationIsValid = statsAreValid && bstIsValid;
-
-  function handleStatChange(stat: StatName, value: string) {
-    const numericValue = Number(value);
-
-    setStats((previous) => ({
-      ...previous,
-      [stat]: numericValue,
-    }));
-  }
 
   function handleRandomize() {
     if (!configurationIsValid) {
       return;
     }
-    setStats(randomizeBST(stats));
+        reset(randomizeBST(stats));
   }
 
   function handleReset() {
-    setStats(pokemon.baseStats);
+    reset(pokemon.baseStats);
   }
 
   return (
@@ -119,11 +117,10 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
                   ? undefined
                   : `Debe ser un entero entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`
               }
-              onChange={(value) => handleStatChange(stat.key, value)}
+              onChange={(value) => updateStat(stat.key, value)}
             />
           );
         })}
-              
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">
