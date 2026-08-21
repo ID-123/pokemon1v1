@@ -1,11 +1,20 @@
-import type { BaseStats, StatName } from "./stats";
+import { type BaseStats, type StatName, STATS } from "./stats";
 import { calculateBST } from "./stats-rules";
 
+// Set value limit per stat
 const RANDOM_BASE_STAT_LIMITS = {
-  min: 1,
+  min: 15,
   max: 255,
 } as const;
 
+const STAT_COUNT = Object.keys(STATS).length;
+
+// Generate random value between min/max 
+function randomInteger(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Fisher-Yates shuffle (random stats assignment order)
 function shuffle<T>(items: T[]): T[] {
   const result = [...items];
 
@@ -18,31 +27,44 @@ function shuffle<T>(items: T[]): T[] {
   return result;
 }
 
-function randomInteger(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+// Check if values are valid
+function isDistributableBST(bst: number): boolean {
+  const minimumBST = STAT_COUNT * RANDOM_BASE_STAT_LIMITS.min;
+
+  const maximumBST = STAT_COUNT * RANDOM_BASE_STAT_LIMITS.max;
+
+  return bst >= minimumBST && bst <= maximumBST;
 }
 
-export function randomizeBST(baseStats: BaseStats): BaseStats {
-  const bst = calculateBST(baseStats);
-  const statNames = shuffle(Object.keys(baseStats) as StatName[]);
+// Check if generated values are within range
+function isValidRandomBaseStat(value: number): boolean {
+  return (
+    value >= RANDOM_BASE_STAT_LIMITS.min && value <= RANDOM_BASE_STAT_LIMITS.max
+  );
+}
 
-  const result: BaseStats = {
-    hp: 0,
-    attack: 0,
-    defense: 0,
-    specialAttack: 0,
-    specialDefense: 0,
-    speed: 0,
-  };
+// Random BS generator
+export function randomizeBST(baseStats: BaseStats): BaseStats {
+  
+  const bst = calculateBST(baseStats);
+  
+  if (!isDistributableBST(bst)) {
+    throw new Error(
+      `BST ${bst} cannot be distributed within the allowed stat limits.`,
+    );
+  }
+
+  const statNames = shuffle(Object.values(STATS)) as StatName[];
+
+  const result: Partial<BaseStats> = {}
 
   let remaining = bst;
 
   for (let index = 0; index < statNames.length - 1; index++) {
+    
     const statName = statNames[index];
     const remainingStats = statNames.length - index - 1;
-
     const minimumForRest = remainingStats * RANDOM_BASE_STAT_LIMITS.min;
-
     const maximumForCurrent = Math.min(
       RANDOM_BASE_STAT_LIMITS.max,
       remaining - minimumForRest,
@@ -58,5 +80,11 @@ export function randomizeBST(baseStats: BaseStats): BaseStats {
 
   result[lastStat] = remaining;
 
-  return result;
+  if (!isValidRandomBaseStat(remaining)) {
+    throw new Error(
+      `Generated stat ${remaining} is outside the allowed range.`,
+    );
+  }
+
+  return result as BaseStats;
 }

@@ -11,6 +11,11 @@ export const STAT_LIMITS = {
   },
 } as const;
 
+export const BASE_STAT_LIMITS = {
+  min: 1,
+  max: 255,
+} as const;
+
 export const TOTAL_EV_LIMIT = 510;
 
 export const LEVEL_LIMITS = {
@@ -32,10 +37,6 @@ export function isValidIVs(ivs: IVs): boolean {
   );
 }
 
-export function calculateEVTotal(evs: EVs): number {
-  return Object.values(evs).reduce((sum, value) => sum + value, 0);
-}
-
 export function isValidEVs(evs: EVs): boolean {
   const valuesAreValid = Object.values(evs).every((value) =>
     isValidIntegerInRange(value, STAT_LIMITS.ev.min, STAT_LIMITS.ev.max),
@@ -48,6 +49,19 @@ export function isValidLevel(level: number): boolean {
   return isValidIntegerInRange(level, LEVEL_LIMITS.min, LEVEL_LIMITS.max);
 }
 
+export function isValidBaseStats(stats: BaseStats): boolean {
+  return Object.values(stats).every(
+    (value) =>
+      Number.isInteger(value) &&
+    value >= BASE_STAT_LIMITS.min &&
+    value <= BASE_STAT_LIMITS.max,
+  );
+}
+
 export function calculateBST(stats: BaseStats): number {
   return Object.values(stats).reduce((total, value) => total + value, 0);
+}
+
+export function calculateEVTotal(evs: EVs): number {
+  return Object.values(evs).reduce((sum, value) => sum + value, 0);
 }
