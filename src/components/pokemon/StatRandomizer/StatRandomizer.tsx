@@ -1,5 +1,5 @@
 import useStats from "./hooks/useStats";
-import type { PokemonSpecies, IVs, EVs, BaseStats, StatName } from "@/domain/pokemon";
+import type { PokemonSpecies, StatName } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
