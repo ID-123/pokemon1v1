@@ -1,12 +1,15 @@
 import useStats from "./hooks/useStats";
-import type { PokemonSpecies, StatName, IVs } from "@/domain/pokemon";
+import type { PokemonSpecies, StatName, IVs, EVs } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
+  calculateEVTotal,
   isValidBaseStats,
   isValidBST,
+  isValidEVs,
   randomizeBST,
   STAT_LIMITS,
+  TOTAL_EV_LIMIT,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
 
@@ -35,6 +38,15 @@ const DEFAULT_IVS: IVs = {
   speed: 31,
 };
 
+const DEFAULT_EVS: EVs = {
+  hp: 0,
+  attack: 0,
+  defense: 0,
+  specialAttack: 0,
+  specialDefense: 0,
+  speed: 0,
+};
+
 function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const { stats, updateStat, reset } = useStats(pokemon.baseStats);
   const {
@@ -42,6 +54,11 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
     updateStat: updateIV,
     reset: resetIV,
   } = useStats<IVs>(DEFAULT_IVS);
+  const {
+    stats: evs,
+    updateStat: updateEV,
+    reset: resetEV,
+  } = useStats<EVs>(DEFAULT_EVS);
 
   const bst = calculateBST(stats);
   const maxBST = calculateBST(pokemon.baseStats);
@@ -49,6 +66,9 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const statsAreValid = isValidBaseStats(stats);
   const bstIsValid = isValidBST(bst, maxBST);
   const configurationIsValid = statsAreValid && bstIsValid;
+
+  const evTotal = calculateEVTotal(evs);
+  const evsAreValid = isValidEVs(evs);
 
   function handleRandomize() {
     if (!configurationIsValid) {
@@ -60,6 +80,7 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   function handleReset() {
     reset(pokemon.baseStats);
     resetIV(DEFAULT_IVS);
+    resetEV(DEFAULT_EVS);
   }
 
   return (
@@ -155,6 +176,35 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
         max={STAT_LIMITS.iv.max}
         onChange={updateIV}
       />
+
+      <StatGroup
+        title="EVs"
+        description={`Valores individuales entre ${STAT_LIMITS.ev.min} y ${STAT_LIMITS.ev.max}.`}
+        stats={evs}
+        fields={STAT_FIELDS}
+        min={STAT_LIMITS.ev.min}
+        max={STAT_LIMITS.ev.max}
+        onChange={updateEV}
+      />
+      <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-slate-400">EV Total</span>
+
+          <span
+            className={`font-semibold ${
+              evsAreValid ? "text-white" : "text-red-400"
+            }`}
+          >
+            {evTotal} / {TOTAL_EV_LIMIT}
+          </span>
+        </div>
+
+        {!evsAreValid && (
+          <p className="mt-2 text-sm text-red-400">
+            ⚠ Los EVs superan el límite total permitido.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
