@@ -19,6 +19,7 @@ import {
   TOTAL_EV_LIMIT,
   calculateFinalStats,
   NATURES,
+  BST_LIMITS,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
 import FinalStatsDisplay from "./FinalStatsDisplay";
@@ -49,13 +50,14 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const statsAreValid = isValidBaseStats(stats);
   const bstIsValid = isValidBST(bst, maxBST);
   const configurationIsValid = statsAreValid && bstIsValid && evsAreValid;
+  const canRandomizeBST = configurationIsValid && bst >= BST_LIMITS.min;
 
   const [natureName, setNatureName] = useState<NatureName>("hardy");
   const nature = NATURES[natureName];
   const finalStats = calculateFinalStats(stats, ivs, evs, nature, DEFAULT_LVL);
 
   function handleRandomize() {
-    if (!configurationIsValid) {
+    if (!canRandomizeBST) {
       return;
     }
     reset(randomizeBST(stats));
@@ -120,7 +122,7 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
         <div className="mt-6 flex flex-wrap gap-3">
           <button
             type="button"
-            disabled={!configurationIsValid}
+            disabled={!canRandomizeBST}
             onClick={handleRandomize}
             className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -148,6 +150,12 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
               ? "✓ Configuración válida"
               : "✕ Configuración inválida"}
           </p>
+          {configurationIsValid && bst < BST_LIMITS.min && (
+            <p className="mt-2 text-sm text-amber-400">
+              El BST es válido, pero es demasiado bajo para la distribución
+              aleatoria actual. El mínimo distribuible es {BST_LIMITS.min}.
+            </p>
+          )}
         </div>
       </section>
 
