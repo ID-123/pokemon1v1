@@ -7,3 +7,5 @@ export * from "./randomizer";
 export * from "./stats-rules";
 export * from "./stats";
 export * from "./types";
+export * from "./nature-data";
+export * from "./final-stats";

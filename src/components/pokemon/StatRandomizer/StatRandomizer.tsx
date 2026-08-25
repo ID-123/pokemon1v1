@@ -1,6 +1,12 @@
+import { useState } from "react";
 import useStats from "./hooks/useStats";
-import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
-import type { PokemonSpecies, IVs, EVs } from "@/domain/pokemon";
+import {
+  DEFAULT_EVS,
+  DEFAULT_IVS,
+  DEFAULT_LVL,
+  STAT_FIELDS,
+} from "./constants";
+import type { PokemonSpecies, IVs, EVs, NatureName } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
@@ -11,6 +17,8 @@ import {
   randomizeBST,
   STAT_LIMITS,
   TOTAL_EV_LIMIT,
+  calculateFinalStats,
+  NATURES,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
 
@@ -40,6 +48,10 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
 
   const evTotal = calculateEVTotal(evs);
   const evsAreValid = isValidEVs(evs);
+
+  const [natureName, setNatureName] = useState<NatureName>("hardy");
+  const nature = NATURES[natureName];
+  const finalStats = calculateFinalStats(stats, ivs, evs, nature, DEFAULT_LVL);
 
   function handleRandomize() {
     if (!configurationIsValid) {
@@ -176,6 +188,22 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           </p>
         )}
       </div>
+
+      <section className="mt-8">
+        <h3 className="text-lg font-semibold">Nature</h3>
+
+        <select
+          value={natureName}
+          onChange={(event) => setNatureName(event.target.value as NatureName)}
+          className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
+        >
+          {Object.keys(NATURES).map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </section>
     </div>
   );
 }
