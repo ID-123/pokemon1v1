@@ -76,5 +76,5 @@ export function calculateEVTotal(evs: EVs): number {
 }
 
 export function isValidBST(bst: number, maxBST: number): boolean {
-  return Number.isInteger(bst) && bst >= BST_LIMITS.min && bst <= maxBST;
+  return Number.isInteger(bst) && bst >= 0 && bst <= maxBST;
 }
