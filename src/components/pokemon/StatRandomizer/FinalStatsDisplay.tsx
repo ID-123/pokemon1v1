@@ -1,26 +1,23 @@
 import type { FinalStats } from "@/domain/pokemon";
+import { DEFAULT_LVL, STAT_FIELDS } from "./constants";
 
 interface FinalStatsDisplayProps {
   stats: FinalStats;
-  fields: {
-    key: keyof FinalStats;
-    label: string;
-  }[];
 }
 
-function FinalStatsDisplay({ stats, fields }: FinalStatsDisplayProps) {
+function FinalStatsDisplay({ stats }: FinalStatsDisplayProps) {
   return (
     <section className="mt-8">
       <header className="mb-4">
         <h3 className="text-lg font-semibold">Final Stats</h3>
 
         <p className="text-sm text-slate-400">
-          Valores calculados según Base Stats, IVs, EVs, Nature y nivel.
+          Calculadas a nivel {DEFAULT_LVL} según Base Stats, IVs, EVs y Nature.
         </p>
       </header>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {fields.map((stat) => (
+        {STAT_FIELDS.map((stat) => (
           <div
             key={stat.key}
             className="rounded-lg border border-slate-700 bg-slate-800 p-3"

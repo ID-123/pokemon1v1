@@ -21,6 +21,7 @@ import {
   NATURES,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
+import FinalStatsDisplay from "./FinalStatsDisplay";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
@@ -204,6 +205,7 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           ))}
         </select>
       </section>
+      <FinalStatsDisplay stats={finalStats} />
     </div>
   );
 }
