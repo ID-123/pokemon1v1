@@ -141,12 +141,12 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
 
           <p
             className={`mt-1 font-medium ${
-              statsAreValid ? "text-green-400" : "text-red-400"
+              configurationIsValid ? "text-green-400" : "text-red-400"
             }`}
           >
-            {statsAreValid
-              ? "✓ Estadísticas válidas"
-              : "✕ Estadísticas inválidas"}
+            {configurationIsValid
+              ? "✓ Configuración válida"
+              : "✕ Configuración inválida"}
           </p>
         </div>
       </section>
