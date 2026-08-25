@@ -43,12 +43,12 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const bst = calculateBST(stats);
   const maxBST = calculateBST(pokemon.baseStats);
 
-  const statsAreValid = isValidBaseStats(stats);
-  const bstIsValid = isValidBST(bst, maxBST);
-  const configurationIsValid = statsAreValid && bstIsValid;
-
   const evTotal = calculateEVTotal(evs);
   const evsAreValid = isValidEVs(evs);
+
+  const statsAreValid = isValidBaseStats(stats);
+  const bstIsValid = isValidBST(bst, maxBST);
+  const configurationIsValid = statsAreValid && bstIsValid && evsAreValid;
 
   const [natureName, setNatureName] = useState<NatureName>("hardy");
   const nature = NATURES[natureName];
@@ -109,7 +109,7 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
 
         <StatGroup
           title="Base Stats"
-          description="Estadísticas individuales entre 1 y 255."
+          description={`Estadísticas individuales entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`}
           stats={stats}
           fields={STAT_FIELDS}
           min={BASE_STAT_LIMITS.min}
