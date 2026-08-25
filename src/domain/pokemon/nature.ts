@@ -28,8 +28,13 @@ export type NatureName =
   | "quirky";
 
 export interface Nature {
-    name: NatureName
-    increasedStat: StatName | null
-    decreasedStat: StatName | null
+  name: NatureName;
+  increasedStat: StatName | null;
+  decreasedStat: StatName | null;
 }
 
+export const NATURE_MODIFIERS = {
+  increased: 1.1,
+  neutral: 1,
+  decreased: 0.9,
+} as const;

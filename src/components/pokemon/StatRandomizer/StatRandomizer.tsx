@@ -1,5 +1,6 @@
 import useStats from "./hooks/useStats";
-import type { PokemonSpecies, StatName, IVs, EVs } from "@/domain/pokemon";
+import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
+import type { PokemonSpecies, IVs, EVs } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
@@ -16,36 +17,6 @@ import StatGroup from "./StatGroup";
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
 }
-
-const STAT_FIELDS: {
-  key: StatName;
-  label: string;
-}[] = [
-  { key: "hp", label: "HP" },
-  { key: "attack", label: "Attack" },
-  { key: "defense", label: "Defense" },
-  { key: "specialAttack", label: "Special Attack" },
-  { key: "specialDefense", label: "Special Defense" },
-  { key: "speed", label: "Speed" },
-];
-
-const DEFAULT_IVS: IVs = {
-  hp: 31,
-  attack: 31,
-  defense: 31,
-  specialAttack: 31,
-  specialDefense: 31,
-  speed: 31,
-};
-
-const DEFAULT_EVS: EVs = {
-  hp: 0,
-  attack: 0,
-  defense: 0,
-  specialAttack: 0,
-  specialDefense: 0,
-  speed: 0,
-};
 
 function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const { stats, updateStat, reset } = useStats(pokemon.baseStats);
