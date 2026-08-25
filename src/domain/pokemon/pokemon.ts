@@ -8,6 +8,7 @@ import type { Nature } from "./nature";
 export interface PokemonSpecies {
   id: number;
   name: string;
+  image?: string;
   types: PokemonType[];
   baseStats: BaseStats;
   abilities: Ability[];
