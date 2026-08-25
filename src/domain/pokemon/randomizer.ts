@@ -1,9 +1,5 @@
 import { type BaseStats, type StatName, STATS } from "./stats";
-import {
-  calculateBST,
-  RANDOM_BASE_STAT_LIMITS,
-  BST_LIMITS,
-} from "./stats-rules";
+import { calculateBST, RANDOM_BASE_STAT_LIMITS } from "./stats-rules";
 
 const STAT_COUNT = Object.keys(STATS).length;
 
@@ -60,13 +56,22 @@ export function randomizeBST(baseStats: BaseStats): BaseStats {
   for (let index = 0; index < statNames.length - 1; index++) {
     const statName = statNames[index];
     const remainingStats = statNames.length - index - 1;
+
     const minimumForRest = remainingStats * RANDOM_BASE_STAT_LIMITS.min;
+
+    const maximumForRest = remainingStats * RANDOM_BASE_STAT_LIMITS.max;
+
+    const minimumForCurrent = Math.max(
+      RANDOM_BASE_STAT_LIMITS.min,
+      remaining - maximumForRest,
+    );
+
     const maximumForCurrent = Math.min(
       RANDOM_BASE_STAT_LIMITS.max,
       remaining - minimumForRest,
     );
 
-    const value = randomInteger(RANDOM_BASE_STAT_LIMITS.min, maximumForCurrent);
+    const value = randomInteger(minimumForCurrent, maximumForCurrent);
 
     result[statName] = value;
     remaining -= value;
