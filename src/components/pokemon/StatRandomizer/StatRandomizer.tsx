@@ -8,7 +8,7 @@ import {
   randomizeBST,
   STAT_LIMITS,
 } from "@/domain/pokemon";
-import StatInput from "./StatInput";
+import StatGroup from "./StatGroup";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
@@ -58,8 +58,8 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   }
 
   function handleReset() {
-      reset(pokemon.baseStats);
-      resetIV(DEFAULT_IVS)
+    reset(pokemon.baseStats);
+    resetIV(DEFAULT_IVS);
   }
 
   return (
@@ -102,32 +102,15 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           </p>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {STAT_FIELDS.map((stat) => {
-            const value = stats[stat.key];
-
-            const isValid =
-              Number.isInteger(value) &&
-              value >= BASE_STAT_LIMITS.min &&
-              value <= BASE_STAT_LIMITS.max;
-
-            return (
-              <StatInput
-                key={stat.key}
-                label={stat.label}
-                value={value}
-                min={BASE_STAT_LIMITS.min}
-                max={BASE_STAT_LIMITS.max}
-                error={
-                  isValid
-                    ? undefined
-                    : `Debe ser un entero entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`
-                }
-                onChange={(value) => updateStat(stat.key, value)}
-              />
-            );
-          })}
-        </div>
+        <StatGroup
+          title="Base Stats"
+          description="Estadísticas individuales entre 1 y 255."
+          stats={stats}
+          fields={STAT_FIELDS}
+          min={BASE_STAT_LIMITS.min}
+          max={BASE_STAT_LIMITS.max}
+          onChange={updateStat}
+        />
 
         <div className="mt-6 flex flex-wrap gap-3">
           <button
@@ -162,43 +145,16 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           </p>
         </div>
       </section>
-      <section className="mt-8">
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold">IVs</h3>
 
-          <p className="text-sm text-slate-400">
-            Valores individuales entre {STAT_LIMITS.iv.min} y{" "}
-            {STAT_LIMITS.iv.max}.
-          </p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          {STAT_FIELDS.map((stat) => {
-            const value = ivs[stat.key];
-
-            const isValid =
-              Number.isInteger(value) &&
-              value >= STAT_LIMITS.iv.min &&
-              value <= STAT_LIMITS.iv.max;
-
-            return (
-              <StatInput
-                key={stat.key}
-                label={stat.label}
-                value={value}
-                min={STAT_LIMITS.iv.min}
-                max={STAT_LIMITS.iv.max}
-                error={
-                  isValid
-                    ? undefined
-                    : `Debe ser un entero entre ${STAT_LIMITS.iv.min} y ${STAT_LIMITS.iv.max}.`
-                }
-                onChange={(value) => updateIV(stat.key, value)}
-              />
-            );
-          })}
-        </div>
-      </section>
+      <StatGroup
+        title="IVs"
+        description={`Valores individuales entre ${STAT_LIMITS.iv.min} y ${STAT_LIMITS.iv.max}.`}
+        stats={ivs}
+        fields={STAT_FIELDS}
+        min={STAT_LIMITS.iv.min}
+        max={STAT_LIMITS.iv.max}
+        onChange={updateIV}
+      />
     </div>
   );
 }
