@@ -1,5 +1,6 @@
 import type { PokemonSpecies, Nature, FinalStats } from "@/domain/pokemon";
 import { FinalStatsDisplay } from "../FinalDisplay/FinalStatsDisplay";
+import { STAT_FIELDS } from "../StatsSetup";
 interface PokemonSummaryProps {
   pokemon: PokemonSpecies;
   nature: Nature;
@@ -11,6 +12,14 @@ export function PokemonSummary({
   nature,
   finalStats,
 }: PokemonSummaryProps) {
+  const increasedStat = STAT_FIELDS.find(
+    (stat) => stat.key === nature.increasedStat,
+  );
+
+  const decreasedStat = STAT_FIELDS.find(
+    (stat) => stat.key === nature.decreasedStat,
+  );
+
   return (
     <section className="rounded-xl border border-slate-700 bg-slate-800/60 p-5">
       <div className="text-center">
@@ -33,11 +42,16 @@ export function PokemonSummary({
           ))}
         </div>
       </div>
-      <div className="mt-6">
-        <p className="text-sm text-slate-400">Nature</p>
-        <p className="mt-1 font-semibold capitalize">{nature.name}</p>
-      </div>
-      <FinalStatsDisplay stats={finalStats} />
+      <p className="mt-1 font-semibold capitalize">
+        {nature.name}
+
+        {increasedStat && decreasedStat && (
+          <span className="ml-2 text-sm font-normal text-slate-400">
+            (+{increasedStat.label}, -{decreasedStat.label})
+          </span>
+        )}
+      </p>
+      <FinalStatsDisplay stats={finalStats} nature={nature} />
     </section>
   );
 }
