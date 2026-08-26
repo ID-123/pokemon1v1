@@ -1,5 +1,4 @@
 import type { PokemonSpecies, Nature, FinalStats } from "@/domain/pokemon";
-import { FinalStatsDisplay } from "../FinalDisplay/FinalStatsDisplay";
 import { STAT_FIELDS } from "../StatsSetup";
 interface PokemonSummaryProps {
   pokemon: PokemonSpecies;
@@ -7,11 +6,7 @@ interface PokemonSummaryProps {
   finalStats: FinalStats;
 }
 
-export function PokemonSummary({
-  pokemon,
-  nature,
-  finalStats,
-}: PokemonSummaryProps) {
+export function PokemonSummary({ pokemon, nature }: PokemonSummaryProps) {
   const increasedStat = STAT_FIELDS.find(
     (stat) => stat.key === nature.increasedStat,
   );
@@ -51,7 +46,6 @@ export function PokemonSummary({
           </span>
         )}
       </p>
-      <FinalStatsDisplay stats={finalStats} nature={nature} />
     </section>
   );
 }

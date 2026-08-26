@@ -21,10 +21,7 @@ interface StatRandomizerProps {
   battlePokemon: BattlePokemonState;
 }
 
-export function StatRandomizer({
-  pokemon,
-  battlePokemon,
-}: StatRandomizerProps) {
+export function StatsSetup({ pokemon, battlePokemon }: StatRandomizerProps) {
   const {
     stats,
     ivs,
