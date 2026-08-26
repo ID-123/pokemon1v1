@@ -3,12 +3,14 @@ import type { PokemonSpecies, NatureName } from "@/domain/pokemon";
 import { NATURES } from "@/domain/pokemon";
 import { PokemonSummary } from "./Summary/PokemonSummary";
 import { StatRandomizer } from "./StatsSetup/StatRandomizer";
+import { useStats } from "./StatsSetup/hooks/useStats";
 
 interface BattlePokemonCardProps {
   pokemon: PokemonSpecies;
 }
 
 export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
+  const { stats, updateStat, reset: resetStats } = useStats(pokemon.baseStats);
   const [natureName, setNatureName] = useState<NatureName>("hardy");
   const nature = NATURES[natureName];
 
@@ -31,6 +33,8 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
         <div className="lg:col-span-3">
           <StatRandomizer
             pokemon={pokemon}
+            stats={stats}
+            onStatChange={updateStat}
             natureName={natureName}
             onNatureChange={setNatureName}
           />
