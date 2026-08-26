@@ -8,7 +8,7 @@ interface BattlePokemonCardProps {
 
 export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
   return (
-    <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-700 bg-slate-900 text-white shadow-lg">
+    <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-700 bg-slate-900 text-white shadow-lg p-6">
       <header className="mb-6">
         <h2 className="text-2xl font-bold">Pokemon Lab</h2>
         <p className="mt-1 text-sm text-slate-400">Setup your Pokemon</p>
