@@ -1,14 +1,14 @@
-import type { PokemonSpecies, NatureName, FinalStats } from "@/domain/pokemon";
+import type { PokemonSpecies, Nature, FinalStats } from "@/domain/pokemon";
 import { FinalStatsDisplay } from "../FinalDisplay/FinalStatsDisplay";
 interface PokemonSummaryProps {
   pokemon: PokemonSpecies;
-  natureName: NatureName;
+  nature: Nature;
   finalStats: FinalStats;
 }
 
 export function PokemonSummary({
   pokemon,
-  natureName,
+  nature,
   finalStats,
 }: PokemonSummaryProps) {
   return (
@@ -35,7 +35,7 @@ export function PokemonSummary({
       </div>
       <div className="mt-6">
         <p className="text-sm text-slate-400">Nature</p>
-        <p className="mt-1 font-semibold capitalize">{natureName}</p>
+        <p className="mt-1 font-semibold capitalize">{nature.name}</p>
       </div>
       <FinalStatsDisplay stats={finalStats} />
     </section>

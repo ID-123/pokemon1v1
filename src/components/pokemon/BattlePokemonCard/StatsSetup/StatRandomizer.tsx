@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useStats } from "./hooks/useStats";
 import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
 import type { PokemonSpecies, IVs, EVs, NatureName } from "@/domain/pokemon";
@@ -12,16 +11,22 @@ import {
   randomizeBST,
   STAT_LIMITS,
   TOTAL_EV_LIMIT,
-  NATURES,
   BST_LIMITS,
 } from "@/domain/pokemon";
 import { StatGroup } from "./StatGroup";
+import { NatureSelector } from "./NatureSelector";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
+  natureName: NatureName;
+  onNatureChange: (nature: NatureName) => void;
 }
 
-export function StatRandomizer({ pokemon }: StatRandomizerProps) {
+export function StatRandomizer({
+  pokemon,
+  natureName,
+  onNatureChange,
+}: StatRandomizerProps) {
   const { stats, updateStat, reset } = useStats(pokemon.baseStats);
   const {
     stats: ivs,
@@ -44,8 +49,6 @@ export function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const bstIsValid = isValidBST(bst, maxBST);
   const configurationIsValid = statsAreValid && bstIsValid && evsAreValid;
   const canRandomizeBST = configurationIsValid && bst >= BST_LIMITS.min;
-
-  const [natureName, setNatureName] = useState<NatureName>("hardy");
 
   function handleRandomize() {
     if (!canRandomizeBST) {
@@ -201,24 +204,7 @@ export function StatRandomizer({ pokemon }: StatRandomizerProps) {
               )}
             </div>
 
-            {/* Nature */}
-            <section className="mt-8">
-              <h3 className="text-lg font-semibold">Nature</h3>
-
-              <select
-                value={natureName}
-                onChange={(event) =>
-                  setNatureName(event.target.value as NatureName)
-                }
-                className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
-              >
-                {Object.keys(NATURES).map((name) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </section>
+            <NatureSelector value={natureName} onChange={onNatureChange} />
           </div>
         </div>
       </section>
