@@ -22,7 +22,7 @@ import {
   BST_LIMITS,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
-import FinalStatsDisplay from "./FinalStatsDisplay";
+import PokemonSummary from "./PokemonSummary";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
@@ -81,7 +81,15 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           </p>
         </header>
 
-        <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4 grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <PokemonSummary
+            pokemon={pokemon}
+            natureName={natureName}
+            finalStats={finalStats}
+          />
+        </div>
+
+        <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-sm text-slate-400">BST</span>
@@ -212,7 +220,6 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           ))}
         </select>
       </section>
-      <FinalStatsDisplay stats={finalStats} />
     </div>
   );
 }
