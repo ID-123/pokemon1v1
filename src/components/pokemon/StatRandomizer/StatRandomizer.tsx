@@ -87,22 +87,22 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
             natureName={natureName}
             finalStats={finalStats}
           />
-        </div>
 
-        <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-sm text-slate-400">BST</span>
-              <p className="text-xs text-slate-500">{pokemon.name}</p>
+          <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-sm text-slate-400">BST</span>
+                <p className="text-xs text-slate-500">{pokemon.name}</p>
+              </div>
+
+              <span
+                className={`text-2xl font-bold ${
+                  bstIsValid ? "text-white" : "text-red-400"
+                }`}
+              >
+                {bst} / {maxBST}
+              </span>
             </div>
-
-            <span
-              className={`text-2xl font-bold ${
-                bstIsValid ? "text-white" : "text-red-400"
-              }`}
-            >
-              {bst} / {maxBST}
-            </span>
           </div>
 
           {!bstIsValid && (
@@ -114,17 +114,17 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           <p className="mt-2 text-xs text-slate-500">
             Cada stat: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
           </p>
-        </div>
 
-        <StatGroup
-          title="Base Stats"
-          description={`Estadísticas individuales entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`}
-          stats={stats}
-          fields={STAT_FIELDS}
-          min={BASE_STAT_LIMITS.min}
-          max={BASE_STAT_LIMITS.max}
-          onChange={updateStat}
-        />
+          <StatGroup
+            title="Base Stats"
+            description={`Estadísticas individuales entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`}
+            stats={stats}
+            fields={STAT_FIELDS}
+            min={BASE_STAT_LIMITS.min}
+            max={BASE_STAT_LIMITS.max}
+            onChange={updateStat}
+          />
+        </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
           <button
