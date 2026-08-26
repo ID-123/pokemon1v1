@@ -1,18 +1,22 @@
-import { useState } from "react";
-import type { PokemonSpecies, NatureName } from "@/domain/pokemon";
-import { NATURES } from "@/domain/pokemon";
 import { PokemonSummary } from "./Summary/PokemonSummary";
 import { StatRandomizer } from "./StatsSetup/StatRandomizer";
-import { useStats } from "./StatsSetup/hooks/useStats";
+import { useBattlePokemon } from "./hooks";
+import type { PokemonSpecies } from "@/domain/pokemon";
 
 interface BattlePokemonCardProps {
   pokemon: PokemonSpecies;
 }
 
 export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
-  const { stats, updateStat, reset: resetStats } = useStats(pokemon.baseStats);
-  const [natureName, setNatureName] = useState<NatureName>("hardy");
-  const nature = NATURES[natureName];
+  const {
+    stats,
+    nature,
+    finalStats,
+    updateStat,
+    resetStats,
+    natureName,
+    setNatureName,
+  } = useBattlePokemon(pokemon);
 
   return (
     <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-700 bg-slate-900 text-white shadow-lg p-6">
@@ -26,7 +30,7 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
         <PokemonSummary
           pokemon={pokemon}
           nature={nature}
-          finalStats={pokemon.baseStats}
+          finalStats={finalStats}
         />
 
         {/* Configuration */}
