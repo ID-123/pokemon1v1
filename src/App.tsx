@@ -1,4 +1,4 @@
-import { StatRandomizer } from "./components/pokemon/BattlePokemonCard/StatsSetup/StatRandomizer";
+import { BattlePokemonCard } from "./components/pokemon/BattlePokemonCard";
 import { usePokemon } from "./hooks/pokemon/usePokemon";
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
 
   return (
     <main className="min-h-screen bg-slate-950 p-8">
-      <StatRandomizer pokemon={pokemon} />
+      <BattlePokemonCard pokemon={pokemon} />
     </main>
   );
 }

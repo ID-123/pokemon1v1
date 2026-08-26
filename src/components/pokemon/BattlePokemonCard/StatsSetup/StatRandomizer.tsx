@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { useStats } from "./hooks/useStats";
-import {
-  DEFAULT_EVS,
-  DEFAULT_IVS,
-  DEFAULT_LVL,
-  STAT_FIELDS,
-} from "./constants";
+import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
 import type { PokemonSpecies, IVs, EVs, NatureName } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
@@ -17,12 +12,11 @@ import {
   randomizeBST,
   STAT_LIMITS,
   TOTAL_EV_LIMIT,
-  calculateFinalStats,
   NATURES,
   BST_LIMITS,
 } from "@/domain/pokemon";
 import { StatGroup } from "./StatGroup";
-import { PokemonSummary } from "../Summary/PokemonSummary";
+
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
 }
@@ -52,8 +46,6 @@ export function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const canRandomizeBST = configurationIsValid && bst >= BST_LIMITS.min;
 
   const [natureName, setNatureName] = useState<NatureName>("hardy");
-  const nature = NATURES[natureName];
-  const finalStats = calculateFinalStats(stats, ivs, evs, nature, DEFAULT_LVL);
 
   function handleRandomize() {
     if (!canRandomizeBST) {
@@ -81,13 +73,6 @@ export function StatRandomizer({ pokemon }: StatRandomizerProps) {
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          {/* Pokemon summary */}
-          <PokemonSummary
-            pokemon={pokemon}
-            natureName={natureName}
-            finalStats={finalStats}
-          />
-
           {/* Stat editor */}
           <div>
             {/* BST */}
