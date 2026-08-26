@@ -53,3 +53,5 @@ export function useBattlePokemon(pokemon: PokemonSpecies) {
     resetEV,
   };
 }
+
+export type BattlePokemonState = ReturnType<typeof useBattlePokemon>;

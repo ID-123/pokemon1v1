@@ -1,13 +1,5 @@
-import { useStats } from "./hooks/useStats";
 import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
-import type {
-  PokemonSpecies,
-  IVs,
-  EVs,
-  NatureName,
-  BaseStats,
-  StatName,
-} from "@/domain/pokemon";
+import type { PokemonSpecies } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
@@ -22,34 +14,30 @@ import {
 } from "@/domain/pokemon";
 import { StatGroup } from "./StatGroup";
 import { NatureSelector } from "./NatureSelector";
+import type { BattlePokemonState } from "../hooks";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
-  stats: BaseStats;
-  onStatChange: (stat: StatName, value: string) => void;
-  onStatsReset: (stats: BaseStats) => void;
-  natureName: NatureName;
-  onNatureChange: (nature: NatureName) => void;
+  battlePokemon: BattlePokemonState;
 }
 
 export function StatRandomizer({
   pokemon,
-  stats,
-  onStatChange,
-  onStatsReset,
-  natureName,
-  onNatureChange,
+  battlePokemon,
 }: StatRandomizerProps) {
   const {
-    stats: ivs,
-    updateStat: updateIV,
-    reset: resetIV,
-  } = useStats<IVs>(DEFAULT_IVS);
-  const {
-    stats: evs,
-    updateStat: updateEV,
-    reset: resetEV,
-  } = useStats<EVs>(DEFAULT_EVS);
+    stats,
+    ivs,
+    evs,
+    natureName,
+    updateStat,
+    updateIV,
+    updateEV,
+    setNatureName,
+    resetStats,
+    resetIV,
+    resetEV,
+  } = battlePokemon;
 
   const bst = calculateBST(stats);
   const maxBST = calculateBST(pokemon.baseStats);
@@ -66,11 +54,11 @@ export function StatRandomizer({
     if (!canRandomizeBST) {
       return;
     }
-    onStatsReset(randomizeBST(stats));
+    resetStats(randomizeBST(stats));
   }
 
   function handleReset() {
-    onStatsReset(pokemon.baseStats);
+    resetStats(pokemon.baseStats);
     resetIV(DEFAULT_IVS);
     resetEV(DEFAULT_EVS);
   }
@@ -128,7 +116,7 @@ export function StatRandomizer({
               fields={STAT_FIELDS}
               min={BASE_STAT_LIMITS.min}
               max={BASE_STAT_LIMITS.max}
-              onChange={onStatChange}
+              onChange={updateStat}
             />
 
             {/* Actions */}
@@ -216,7 +204,7 @@ export function StatRandomizer({
               )}
             </div>
 
-            <NatureSelector value={natureName} onChange={onNatureChange} />
+            <NatureSelector value={natureName} onChange={setNatureName} />
           </div>
         </div>
       </section>

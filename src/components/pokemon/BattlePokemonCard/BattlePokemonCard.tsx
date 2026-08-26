@@ -1,5 +1,5 @@
 import { PokemonSummary } from "./Summary/PokemonSummary";
-import { StatRandomizer } from "./StatsSetup/StatRandomizer";
+import { StatRandomizer } from "./StatsSetup/StatsSetup";
 import { useBattlePokemon } from "./hooks";
 import type { PokemonSpecies } from "@/domain/pokemon";
 
@@ -8,16 +8,7 @@ interface BattlePokemonCardProps {
 }
 
 export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
-  const {
-    stats,
-    nature,
-    finalStats,
-    updateStat,
-    resetStats,
-    natureName,
-    setNatureName,
-  } = useBattlePokemon(pokemon);
-
+  const battlePokemon = useBattlePokemon(pokemon);
   return (
     <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-700 bg-slate-900 text-white shadow-lg p-6">
       <header className="mb-6">
@@ -29,20 +20,13 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
         {/* Summary */}
         <PokemonSummary
           pokemon={pokemon}
-          nature={nature}
-          finalStats={finalStats}
+          nature={battlePokemon.nature}
+          finalStats={battlePokemon.finalStats}
         />
 
         {/* Configuration */}
         <div className="lg:col-span-3">
-          <StatRandomizer
-            pokemon={pokemon}
-            stats={stats}
-            onStatChange={updateStat}
-            onStatsReset={resetStats}
-            natureName={natureName}
-            onNatureChange={setNatureName}
-          />
+          <StatRandomizer pokemon={pokemon} battlePokemon={battlePokemon} />
         </div>
       </div>
     </div>
