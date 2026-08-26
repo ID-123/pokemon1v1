@@ -2,7 +2,7 @@ import StatRandomizer from "./components/pokemon/StatRandomizer/StatRandomizer";
 import usePokemon from "./hooks/pokemon/usePokemon";
 
 function App() {
-  const { pokemon, loading, error } = usePokemon("flareon");
+  const { pokemon, loading, error } = usePokemon("slaking");
 
   if (loading) {
     return (

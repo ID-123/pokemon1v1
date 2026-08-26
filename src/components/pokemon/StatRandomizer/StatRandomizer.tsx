@@ -70,7 +70,7 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl rounded-2xl border border-slate-700 bg-slate-900 p-6 text-white shadow-lg">
+    <div className="mx-auto w-full max-w-5xl rounded-2xl border border-slate-700 bg-slate-900 p-6 text-white shadow-lg">
       <section className="mt-2">
         <header className="mb-6">
           <h2 className="text-2xl font-bold">Base Stats Lab</h2>
@@ -81,11 +81,10 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
           </p>
         </header>
 
-        <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
+        <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4 grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-sm text-slate-400">BST</span>
-
               <p className="text-xs text-slate-500">{pokemon.name}</p>
             </div>
 
