@@ -5,7 +5,7 @@ interface FinalStatsDisplayProps {
   stats: FinalStats;
 }
 
-function FinalStatsDisplay({ stats }: FinalStatsDisplayProps) {
+export function FinalStatsDisplay({ stats }: FinalStatsDisplayProps) {
   return (
     <section className="mt-8">
       <header className="mb-4">
@@ -31,5 +31,3 @@ function FinalStatsDisplay({ stats }: FinalStatsDisplayProps) {
     </section>
   );
 }
-
-export default FinalStatsDisplay;

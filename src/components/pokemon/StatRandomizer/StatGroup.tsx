@@ -1,5 +1,5 @@
 import type { Stats, StatName } from "@/domain/pokemon";
-import StatInput from "./StatInput";
+import { StatInput } from "./StatInput";
 
 interface StatField {
   key: StatName;
@@ -16,7 +16,7 @@ interface StatGroupProps<T extends Stats> {
   onChange: (stat: StatName, value: string) => void;
 }
 
-function StatGroup<T extends Stats>({
+export function StatGroup<T extends Stats>({
   title,
   description,
   stats,
@@ -60,5 +60,3 @@ function StatGroup<T extends Stats>({
     </section>
   );
 }
-
-export default StatGroup;

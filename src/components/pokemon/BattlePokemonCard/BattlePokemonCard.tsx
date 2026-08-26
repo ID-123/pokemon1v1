@@ -1,6 +1,6 @@
 import type { PokemonSpecies } from "@/domain/pokemon";
 import { PokemonSummary } from "./PokemonSummary";
-import StatRandomizer from "../StatRandomizer/StatRandomizer";
+import { StatRandomizer } from "../StatRandomizer/StatRandomizer";
 
 interface BattlePokemonCardProps {
   pokemon: PokemonSpecies;

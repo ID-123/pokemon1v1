@@ -8,7 +8,7 @@ interface UsePokemonResult {
   error: string | null;
 }
 
-function usePokemon(identifier: string | number): UsePokemonResult {
+export function usePokemon(identifier: string | number): UsePokemonResult {
   const [pokemon, setPokemon] = useState<PokemonSpecies | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,5 +52,3 @@ function usePokemon(identifier: string | number): UsePokemonResult {
     error,
   };
 }
-
-export default usePokemon;

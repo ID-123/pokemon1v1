@@ -7,7 +7,7 @@ interface StatInputProps {
   onChange: (value: string) => void;
 }
 
-function StatInput({
+export function StatInput({
   label,
   value,
   min,
@@ -32,5 +32,3 @@ function StatInput({
     </label>
   );
 }
-
-export default StatInput;

@@ -7,7 +7,7 @@ interface UseStatsResult<T extends Stats> {
   reset: (nextStats: T) => void;
 }
 
-function useStats<T extends Stats>(initialStats: T): UseStatsResult<T> {
+export function useStats<T extends Stats>(initialStats: T): UseStatsResult<T> {
   const [stats, setStats] = useState<T>(initialStats);
 
   function updateStat(stat: StatName, value: string) {
@@ -29,5 +29,3 @@ function useStats<T extends Stats>(initialStats: T): UseStatsResult<T> {
     reset,
   };
 }
-
-export default useStats;

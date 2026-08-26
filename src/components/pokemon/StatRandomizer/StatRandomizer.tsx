@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useStats from "./hooks/useStats";
+import { useStats } from "./hooks/useStats";
 import {
   DEFAULT_EVS,
   DEFAULT_IVS,
@@ -21,13 +21,13 @@ import {
   NATURES,
   BST_LIMITS,
 } from "@/domain/pokemon";
-import StatGroup from "./StatGroup";
+import { StatGroup } from "./StatGroup";
 import { PokemonSummary } from "../BattlePokemonCard";
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
 }
 
-function StatRandomizer({ pokemon }: StatRandomizerProps) {
+export function StatRandomizer({ pokemon }: StatRandomizerProps) {
   const { stats, updateStat, reset } = useStats(pokemon.baseStats);
   const {
     stats: ivs,
@@ -240,5 +240,3 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
     </div>
   );
 }
-
-export default StatRandomizer;
