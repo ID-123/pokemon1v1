@@ -1,6 +1,13 @@
 import { useStats } from "./hooks/useStats";
 import { DEFAULT_EVS, DEFAULT_IVS, STAT_FIELDS } from "./constants";
-import type { PokemonSpecies, IVs, EVs, NatureName } from "@/domain/pokemon";
+import type {
+  PokemonSpecies,
+  IVs,
+  EVs,
+  NatureName,
+  BaseStats,
+  StatName,
+} from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
@@ -18,16 +25,21 @@ import { NatureSelector } from "./NatureSelector";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
+  stats: BaseStats;
+  onStatChange: (stat: StatName, value: string) => void;
+  onStatsReset: (stats: BaseStats) => void;
   natureName: NatureName;
   onNatureChange: (nature: NatureName) => void;
 }
 
 export function StatRandomizer({
   pokemon,
+  stats,
+  onStatChange,
+  onStatsReset,
   natureName,
   onNatureChange,
 }: StatRandomizerProps) {
-  const { stats, updateStat, reset } = useStats(pokemon.baseStats);
   const {
     stats: ivs,
     updateStat: updateIV,
@@ -54,11 +66,11 @@ export function StatRandomizer({
     if (!canRandomizeBST) {
       return;
     }
-    reset(randomizeBST(stats));
+    onStatsReset(randomizeBST(stats));
   }
 
   function handleReset() {
-    reset(pokemon.baseStats);
+    onStatsReset(pokemon.baseStats);
     resetIV(DEFAULT_IVS);
     resetEV(DEFAULT_EVS);
   }
@@ -116,7 +128,7 @@ export function StatRandomizer({
               fields={STAT_FIELDS}
               min={BASE_STAT_LIMITS.min}
               max={BASE_STAT_LIMITS.max}
-              onChange={updateStat}
+              onChange={onStatChange}
             />
 
             {/* Actions */}

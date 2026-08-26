@@ -35,6 +35,7 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
             pokemon={pokemon}
             stats={stats}
             onStatChange={updateStat}
+            onStatsReset={resetStats}
             natureName={natureName}
             onNatureChange={setNatureName}
           />
