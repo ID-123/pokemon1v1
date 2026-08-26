@@ -1,5 +1,5 @@
 import type { FinalStats } from "@/domain/pokemon";
-import { DEFAULT_LVL, STAT_FIELDS } from "./constants";
+import { STAT_FIELDS, DEFAULT_LVL } from "../StatsSetup";
 
 interface FinalStatsDisplayProps {
   stats: FinalStats;

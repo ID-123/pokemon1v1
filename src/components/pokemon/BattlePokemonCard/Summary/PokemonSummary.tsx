@@ -1,6 +1,5 @@
 import type { PokemonSpecies, NatureName, FinalStats } from "@/domain/pokemon";
-import { FinalStatsDisplay } from "../StatRandomizer/FinalStatsDisplay";
-
+import { FinalStatsDisplay } from "../FinalDisplay/FinalStatsDisplay";
 interface PokemonSummaryProps {
   pokemon: PokemonSpecies;
   natureName: NatureName;

@@ -22,7 +22,7 @@ import {
   BST_LIMITS,
 } from "@/domain/pokemon";
 import { StatGroup } from "./StatGroup";
-import { PokemonSummary } from "../BattlePokemonCard";
+import { PokemonSummary } from "../Summary/PokemonSummary";
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
 }

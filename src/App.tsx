@@ -1,4 +1,4 @@
-import { StatRandomizer } from "./components/pokemon/StatRandomizer/StatRandomizer";
+import { StatRandomizer } from "./components/pokemon/BattlePokemonCard/StatsSetup/StatRandomizer";
 import { usePokemon } from "./hooks/pokemon/usePokemon";
 
 function App() {
