@@ -22,7 +22,7 @@ import {
   BST_LIMITS,
 } from "@/domain/pokemon";
 import StatGroup from "./StatGroup";
-import PokemonSummary from "./PokemonSummary";
+import PokemonSummary from "../BattlePokemonCard/PokemonSummary";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
@@ -82,143 +82,161 @@ function StatRandomizer({ pokemon }: StatRandomizerProps) {
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          {/* Pokemon summary */}
           <PokemonSummary
             pokemon={pokemon}
             natureName={natureName}
             finalStats={finalStats}
           />
 
-          <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-sm text-slate-400">BST</span>
-                <p className="text-xs text-slate-500">{pokemon.name}</p>
+          {/* Stat editor */}
+          <div>
+            {/* BST */}
+            <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-sm text-slate-400">BST</span>
+
+                  <p className="text-xs text-slate-500">{pokemon.name}</p>
+                </div>
+
+                <span
+                  className={`text-2xl font-bold ${
+                    bstIsValid ? "text-white" : "text-red-400"
+                  }`}
+                >
+                  {bst} / {maxBST}
+                </span>
               </div>
 
-              <span
-                className={`text-2xl font-bold ${
-                  bstIsValid ? "text-white" : "text-red-400"
+              {!bstIsValid && (
+                <p className="mt-3 text-sm text-red-400">
+                  ⚠ Las estadísticas superan el BST permitido para{" "}
+                  {pokemon.name}.
+                </p>
+              )}
+
+              <p className="mt-2 text-xs text-slate-500">
+                Cada stat: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
+              </p>
+            </div>
+
+            {/* Base stats */}
+            <StatGroup
+              title="Base Stats"
+              description={`Estadísticas individuales entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`}
+              stats={stats}
+              fields={STAT_FIELDS}
+              min={BASE_STAT_LIMITS.min}
+              max={BASE_STAT_LIMITS.max}
+              onChange={updateStat}
+            />
+
+            {/* Actions */}
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                disabled={!canRandomizeBST}
+                onClick={handleRandomize}
+                className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Randomize BST
+              </button>
+
+              <button
+                type="button"
+                onClick={handleReset}
+                className="rounded-lg border border-slate-600 px-4 py-2 font-medium transition hover:bg-slate-800"
+              >
+                Reset
+              </button>
+            </div>
+
+            {/* Configuration status */}
+            <div className="mt-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
+              <p className="text-sm text-slate-400">Estado</p>
+
+              <p
+                className={`mt-1 font-medium ${
+                  configurationIsValid ? "text-green-400" : "text-red-400"
                 }`}
               >
-                {bst} / {maxBST}
-              </span>
+                {configurationIsValid
+                  ? "✓ Configuración válida"
+                  : "✕ Configuración inválida"}
+              </p>
+
+              {configurationIsValid && bst < BST_LIMITS.min && (
+                <p className="mt-2 text-sm text-amber-400">
+                  El BST es válido, pero es demasiado bajo para la distribución
+                  aleatoria actual. El mínimo distribuible es {BST_LIMITS.min}.
+                </p>
+              )}
             </div>
+
+            {/* IVs */}
+            <StatGroup
+              title="IVs"
+              description={`Valores individuales entre ${STAT_LIMITS.iv.min} y ${STAT_LIMITS.iv.max}.`}
+              stats={ivs}
+              fields={STAT_FIELDS}
+              min={STAT_LIMITS.iv.min}
+              max={STAT_LIMITS.iv.max}
+              onChange={updateIV}
+            />
+
+            {/* EVs */}
+            <StatGroup
+              title="EVs"
+              description={`Valores individuales entre ${STAT_LIMITS.ev.min} y ${STAT_LIMITS.ev.max}.`}
+              stats={evs}
+              fields={STAT_FIELDS}
+              min={STAT_LIMITS.ev.min}
+              max={STAT_LIMITS.ev.max}
+              onChange={updateEV}
+            />
+
+            {/* EV total */}
+            <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">EV Total</span>
+
+                <span
+                  className={`font-semibold ${
+                    evsAreValid ? "text-white" : "text-red-400"
+                  }`}
+                >
+                  {evTotal} / {TOTAL_EV_LIMIT}
+                </span>
+              </div>
+
+              {!evsAreValid && (
+                <p className="mt-2 text-sm text-red-400">
+                  ⚠ Los EVs superan el límite total permitido.
+                </p>
+              )}
+            </div>
+
+            {/* Nature */}
+            <section className="mt-8">
+              <h3 className="text-lg font-semibold">Nature</h3>
+
+              <select
+                value={natureName}
+                onChange={(event) =>
+                  setNatureName(event.target.value as NatureName)
+                }
+                className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
+              >
+                {Object.keys(NATURES).map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </section>
           </div>
-
-          {!bstIsValid && (
-            <p className="mt-3 text-sm text-red-400">
-              ⚠ Las estadísticas superan el BST permitido para {pokemon.name}.
-            </p>
-          )}
-
-          <p className="mt-2 text-xs text-slate-500">
-            Cada stat: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
-          </p>
-
-          <StatGroup
-            title="Base Stats"
-            description={`Estadísticas individuales entre ${BASE_STAT_LIMITS.min} y ${BASE_STAT_LIMITS.max}.`}
-            stats={stats}
-            fields={STAT_FIELDS}
-            min={BASE_STAT_LIMITS.min}
-            max={BASE_STAT_LIMITS.max}
-            onChange={updateStat}
-          />
         </div>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          <button
-            type="button"
-            disabled={!canRandomizeBST}
-            onClick={handleRandomize}
-            className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            Randomize BST
-          </button>
-
-          <button
-            type="button"
-            onClick={handleReset}
-            className="rounded-lg border border-slate-600 px-4 py-2 font-medium transition hover:bg-slate-800"
-          >
-            Reset
-          </button>
-        </div>
-
-        <div className="mt-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
-          <p className="text-sm text-slate-400">Estado</p>
-
-          <p
-            className={`mt-1 font-medium ${
-              configurationIsValid ? "text-green-400" : "text-red-400"
-            }`}
-          >
-            {configurationIsValid
-              ? "✓ Configuración válida"
-              : "✕ Configuración inválida"}
-          </p>
-          {configurationIsValid && bst < BST_LIMITS.min && (
-            <p className="mt-2 text-sm text-amber-400">
-              El BST es válido, pero es demasiado bajo para la distribución
-              aleatoria actual. El mínimo distribuible es {BST_LIMITS.min}.
-            </p>
-          )}
-        </div>
-      </section>
-
-      <StatGroup
-        title="IVs"
-        description={`Valores individuales entre ${STAT_LIMITS.iv.min} y ${STAT_LIMITS.iv.max}.`}
-        stats={ivs}
-        fields={STAT_FIELDS}
-        min={STAT_LIMITS.iv.min}
-        max={STAT_LIMITS.iv.max}
-        onChange={updateIV}
-      />
-
-      <StatGroup
-        title="EVs"
-        description={`Valores individuales entre ${STAT_LIMITS.ev.min} y ${STAT_LIMITS.ev.max}.`}
-        stats={evs}
-        fields={STAT_FIELDS}
-        min={STAT_LIMITS.ev.min}
-        max={STAT_LIMITS.ev.max}
-        onChange={updateEV}
-      />
-      <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-slate-400">EV Total</span>
-
-          <span
-            className={`font-semibold ${
-              evsAreValid ? "text-white" : "text-red-400"
-            }`}
-          >
-            {evTotal} / {TOTAL_EV_LIMIT}
-          </span>
-        </div>
-
-        {!evsAreValid && (
-          <p className="mt-2 text-sm text-red-400">
-            ⚠ Los EVs superan el límite total permitido.
-          </p>
-        )}
-      </div>
-
-      <section className="mt-8">
-        <h3 className="text-lg font-semibold">Nature</h3>
-
-        <select
-          value={natureName}
-          onChange={(event) => setNatureName(event.target.value as NatureName)}
-          className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2"
-        >
-          {Object.keys(NATURES).map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
       </section>
     </div>
   );
