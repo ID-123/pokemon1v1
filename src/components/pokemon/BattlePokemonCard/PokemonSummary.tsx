@@ -7,7 +7,7 @@ interface PokemonSummaryProps {
   finalStats: FinalStats;
 }
 
-function PokemonSummary({
+export function PokemonSummary({
   pokemon,
   natureName,
   finalStats,
@@ -42,5 +42,3 @@ function PokemonSummary({
     </section>
   );
 }
-
-export default PokemonSummary;
