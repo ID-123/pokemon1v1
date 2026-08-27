@@ -1,7 +1,7 @@
 import { BattlePokemonCard } from "./components/pokemon/BattlePokemonCard";
 import { usePokemon } from "./hooks/pokemon/usePokemon";
 
-function App() {
+export function App() {
   const { pokemon, loading, error } = usePokemon("slaking");
 
   if (loading) {
@@ -26,5 +26,3 @@ function App() {
     </main>
   );
 }
-
-export default App;
