@@ -1,5 +1,11 @@
-import { type BaseStats, type StatName, STATS } from "./stats";
-import { calculateBST, RANDOM_BASE_STAT_LIMITS } from "./stats-rules";
+import type { BaseStats, StatName, IVs } from "./stats";
+import { STATS } from "./stats";
+import {
+  BST_LIMITS,
+  calculateBST,
+  RANDOM_BASE_STAT_LIMITS,
+  STAT_LIMITS,
+} from "./stats-rules";
 
 const STAT_COUNT = Object.keys(STATS).length;
 
@@ -21,6 +27,15 @@ function shuffle<T>(items: T[]): T[] {
   return result;
 }
 
+// Check if generated values are within range
+export function isValidRandomStat(
+  value: number,
+  min: number,
+  max: number,
+): boolean {
+  return value >= min && value <= max;
+}
+
 // Check if values are valid
 function isDistributableBST(bst: number): boolean {
   const minimumBST = STAT_COUNT * RANDOM_BASE_STAT_LIMITS.min;
@@ -28,13 +43,6 @@ function isDistributableBST(bst: number): boolean {
   const maximumBST = STAT_COUNT * RANDOM_BASE_STAT_LIMITS.max;
 
   return bst >= minimumBST && bst <= maximumBST;
-}
-
-// Check if generated values are within range
-function isValidRandomBaseStat(value: number): boolean {
-  return (
-    value >= RANDOM_BASE_STAT_LIMITS.min && value <= RANDOM_BASE_STAT_LIMITS.max
-  );
 }
 
 // Random BS generator
@@ -81,7 +89,7 @@ export function randomizeBST(baseStats: BaseStats): BaseStats {
 
   result[lastStat] = remaining;
 
-  if (!isValidRandomBaseStat(remaining)) {
+  if (!isValidRandomStat(remaining, BST_LIMITS.min, bst)) {
     throw new Error(
       `Generated stat ${remaining} is outside the allowed range.`,
     );
@@ -89,3 +97,17 @@ export function randomizeBST(baseStats: BaseStats): BaseStats {
 
   return result as BaseStats;
 }
+
+// Random IVs
+export function randomizeIVs(): IVs {
+  return {
+    hp: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+    attack: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+    defense: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+    specialAttack: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+    specialDefense: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+    speed: randomInteger(STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
+  };
+}
+
+// Random EVs

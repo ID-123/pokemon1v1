@@ -1,3 +1,4 @@
+import { STAT_FIELDS } from "@/components/pokemon/BattlePokemonCard/StatsSetup";
 import type { EVs, IVs, BaseStats } from "./stats";
 
 export const STAT_LIMITS = {
@@ -25,6 +26,8 @@ export const BST_LIMITS = {
   min: RANDOM_BASE_STAT_LIMITS.min * 6,
 } as const;
 
+export const TOTAL_IV_LIMIT = 31 * STAT_FIELDS.length;
+
 export const TOTAL_EV_LIMIT = 510;
 
 export const LEVEL_LIMITS = {
@@ -38,12 +41,6 @@ function isValidIntegerInRange(
   max: number,
 ): boolean {
   return Number.isInteger(value) && value >= min && value <= max;
-}
-
-export function isValidIVs(ivs: IVs): boolean {
-  return Object.values(ivs).every((value) =>
-    isValidIntegerInRange(value, STAT_LIMITS.iv.min, STAT_LIMITS.iv.max),
-  );
 }
 
 export function isValidEVs(evs: EVs): boolean {
@@ -67,12 +64,23 @@ export function isValidBaseStats(stats: BaseStats): boolean {
   );
 }
 
+export function calculateStatTotal<T extends object>(stats: T): number {
+  return Object.values(stats).reduce(
+    (total, value) => total + Number(value),
+    0,
+  );
+}
+
 export function calculateBST(stats: BaseStats): number {
-  return Object.values(stats).reduce((total, value) => total + value, 0);
+  return calculateStatTotal(stats);
 }
 
 export function calculateEVTotal(evs: EVs): number {
-  return Object.values(evs).reduce((sum, value) => sum + value, 0);
+  return calculateStatTotal(evs);
+}
+
+export function calculateIVTotal(ivs: IVs): number {
+  return calculateStatTotal(ivs);
 }
 
 export function isValidBST(bst: number, maxBST: number): boolean {

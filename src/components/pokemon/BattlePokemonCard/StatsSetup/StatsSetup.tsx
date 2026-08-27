@@ -3,18 +3,17 @@ import type { PokemonSpecies } from "@/domain/pokemon";
 import {
   BASE_STAT_LIMITS,
   calculateBST,
-  calculateEVTotal,
   isValidBaseStats,
   isValidBST,
   isValidEVs,
   randomizeBST,
-  STAT_LIMITS,
-  TOTAL_EV_LIMIT,
   BST_LIMITS,
 } from "@/domain/pokemon";
 import { StatGroup } from "./StatGroup";
 import { NatureSelector } from "./NatureSelector";
 import type { BattlePokemonState } from "../hooks";
+import { IVSetup } from "./IVSetup";
+import { EVSetup } from "./EVSetup";
 
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
@@ -24,12 +23,9 @@ interface StatRandomizerProps {
 export function StatsSetup({ pokemon, battlePokemon }: StatRandomizerProps) {
   const {
     stats,
-    ivs,
     evs,
     natureName,
     updateStat,
-    updateIV,
-    updateEV,
     setNatureName,
     resetStats,
     resetIV,
@@ -39,7 +35,6 @@ export function StatsSetup({ pokemon, battlePokemon }: StatRandomizerProps) {
   const bst = calculateBST(stats);
   const maxBST = calculateBST(pokemon.baseStats);
 
-  const evTotal = calculateEVTotal(evs);
   const evsAreValid = isValidEVs(evs);
 
   const statsAreValid = isValidBaseStats(stats);
@@ -159,48 +154,12 @@ export function StatsSetup({ pokemon, battlePokemon }: StatRandomizerProps) {
             </div>
 
             {/* IVs */}
-            <StatGroup
-              title="IVs"
-              description={`Valores individuales entre ${STAT_LIMITS.iv.min} y ${STAT_LIMITS.iv.max}.`}
-              stats={ivs}
-              fields={STAT_FIELDS}
-              min={STAT_LIMITS.iv.min}
-              max={STAT_LIMITS.iv.max}
-              onChange={updateIV}
-            />
+            <IVSetup battlePokemon={battlePokemon} />
 
             {/* EVs */}
-            <StatGroup
-              title="EVs"
-              description={`Valores individuales entre ${STAT_LIMITS.ev.min} y ${STAT_LIMITS.ev.max}.`}
-              stats={evs}
-              fields={STAT_FIELDS}
-              min={STAT_LIMITS.ev.min}
-              max={STAT_LIMITS.ev.max}
-              onChange={updateEV}
-            />
+            <EVSetup battlePokemon={battlePokemon} />
 
-            {/* EV total */}
-            <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800 p-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-400">EV Total</span>
-
-                <span
-                  className={`font-semibold ${
-                    evsAreValid ? "text-white" : "text-red-400"
-                  }`}
-                >
-                  {evTotal} / {TOTAL_EV_LIMIT}
-                </span>
-              </div>
-
-              {!evsAreValid && (
-                <p className="mt-2 text-sm text-red-400">
-                  ⚠ Los EVs superan el límite total permitido.
-                </p>
-              )}
-            </div>
-
+            {/* Nature */}
             <NatureSelector value={natureName} onChange={setNatureName} />
           </div>
         </div>

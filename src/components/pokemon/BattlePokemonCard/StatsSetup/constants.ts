@@ -12,22 +12,21 @@ export const STAT_FIELDS: {
   { key: "speed", label: "Speed" },
 ];
 
-export const DEFAULT_IVS: IVs = {
-  hp: 31,
-  attack: 31,
-  defense: 31,
-  specialAttack: 31,
-  specialDefense: 31,
-  speed: 31,
-};
-
-export const DEFAULT_EVS: EVs = {
+export const DEFAULT_STATS = {
   hp: 0,
   attack: 0,
   defense: 0,
   specialAttack: 0,
   specialDefense: 0,
   speed: 0,
+};
+
+export const DEFAULT_IVS: IVs = {
+  ...DEFAULT_STATS,
+};
+
+export const DEFAULT_EVS: EVs = {
+  ...DEFAULT_STATS,
 };
 
 export const DEFAULT_LVL = 50;
