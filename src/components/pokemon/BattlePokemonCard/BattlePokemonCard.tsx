@@ -2,7 +2,6 @@ import { PokemonSummary } from "./Summary/PokemonSummary";
 import { StatsSetup } from "./StatsSetup/StatsSetup";
 import { useBattlePokemon } from "./hooks";
 import type { PokemonSpecies } from "@/domain/pokemon";
-import { FinalStatsDisplay } from "./FinalDisplay/FinalStatsDisplay";
 
 interface BattlePokemonCardProps {
   pokemon: PokemonSpecies;
@@ -17,7 +16,7 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
         <p className="mt-1 text-sm text-slate-400">Setup your Pokemon</p>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_2fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[1fr_3fr]">
         <PokemonSummary
           pokemon={pokemon}
           nature={battlePokemon.nature}
@@ -25,11 +24,6 @@ export function BattlePokemonCard({ pokemon }: BattlePokemonCardProps) {
         />
 
         <StatsSetup pokemon={pokemon} battlePokemon={battlePokemon} />
-
-        <FinalStatsDisplay
-          stats={battlePokemon.finalStats}
-          nature={battlePokemon.nature}
-        />
       </div>
     </div>
   );

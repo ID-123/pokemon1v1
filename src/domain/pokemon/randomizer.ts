@@ -45,6 +45,7 @@ function isDistributableBST(bst: number): boolean {
   return bst >= minimumBST && bst <= maximumBST;
 }
 
+// Generic Randomizer
 function randomizeStatDistribution(
   total: number,
   min: number,

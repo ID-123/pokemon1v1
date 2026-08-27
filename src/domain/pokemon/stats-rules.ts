@@ -1,5 +1,4 @@
-import { STAT_FIELDS } from "@/components/pokemon/BattlePokemonCard/StatsSetup";
-import type { EVs, IVs, BaseStats } from "./stats";
+import { type EVs, type IVs, type BaseStats } from "./stats";
 
 export const STAT_LIMITS = {
   iv: {
@@ -26,7 +25,7 @@ export const BST_LIMITS = {
   min: RANDOM_BASE_STAT_LIMITS.min * 6,
 } as const;
 
-export const TOTAL_IV_LIMIT = 31 * STAT_FIELDS.length;
+export const TOTAL_IV_LIMIT = 31 * 6;
 
 export const TOTAL_EV_LIMIT = 510;
 
