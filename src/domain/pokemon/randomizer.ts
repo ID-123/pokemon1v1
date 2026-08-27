@@ -1,10 +1,10 @@
-import type { BaseStats, StatName, IVs } from "./stats";
+import type { BaseStats, IVs, EVs, Stats, StatName } from "./stats";
 import { STATS } from "./stats";
 import {
-  BST_LIMITS,
   calculateBST,
   RANDOM_BASE_STAT_LIMITS,
   STAT_LIMITS,
+  TOTAL_EV_LIMIT,
 } from "./stats-rules";
 
 const STAT_COUNT = Object.keys(STATS).length;
@@ -45,39 +45,25 @@ function isDistributableBST(bst: number): boolean {
   return bst >= minimumBST && bst <= maximumBST;
 }
 
-// Random BS generator
-export function randomizeBST(baseStats: BaseStats): BaseStats {
-  const bst = calculateBST(baseStats);
-
-  if (!isDistributableBST(bst)) {
-    throw new Error(
-      `BST ${bst} cannot be distributed within the allowed stat limits.`,
-    );
-  }
-
-  const statNames = shuffle(Object.values(STATS)) as StatName[];
-
-  const result: Partial<BaseStats> = {};
-
-  let remaining = bst;
+function randomizeStatDistribution(
+  total: number,
+  min: number,
+  max: number,
+): Stats {
+  const statNames = shuffle(Object.values(STATS) as StatName[]);
+  const result = {} as Stats;
+  let remaining = total;
 
   for (let index = 0; index < statNames.length - 1; index++) {
     const statName = statNames[index];
     const remainingStats = statNames.length - index - 1;
 
-    const minimumForRest = remainingStats * RANDOM_BASE_STAT_LIMITS.min;
+    const minimumForRest = remainingStats * min;
+    const maximumForRest = remainingStats * max;
 
-    const maximumForRest = remainingStats * RANDOM_BASE_STAT_LIMITS.max;
+    const minimumForCurrent = Math.max(min, remaining - maximumForRest);
 
-    const minimumForCurrent = Math.max(
-      RANDOM_BASE_STAT_LIMITS.min,
-      remaining - maximumForRest,
-    );
-
-    const maximumForCurrent = Math.min(
-      RANDOM_BASE_STAT_LIMITS.max,
-      remaining - minimumForRest,
-    );
+    const maximumForCurrent = Math.min(max, remaining - minimumForRest);
 
     const value = randomInteger(minimumForCurrent, maximumForCurrent);
 
@@ -89,13 +75,30 @@ export function randomizeBST(baseStats: BaseStats): BaseStats {
 
   result[lastStat] = remaining;
 
-  if (!isValidRandomStat(remaining, BST_LIMITS.min, bst)) {
+  if (!isValidRandomStat(remaining, min, max)) {
     throw new Error(
       `Generated stat ${remaining} is outside the allowed range.`,
     );
   }
 
-  return result as BaseStats;
+  return result;
+}
+
+// Random BS generator
+export function randomizeBST(baseStats: BaseStats): BaseStats {
+  const bst = calculateBST(baseStats);
+
+  if (!isDistributableBST(bst)) {
+    throw new Error(
+      `BST ${bst} cannot be distributed within the allowed stat limits.`,
+    );
+  }
+
+  return randomizeStatDistribution(
+    bst,
+    RANDOM_BASE_STAT_LIMITS.min,
+    RANDOM_BASE_STAT_LIMITS.max,
+  );
 }
 
 // Random IVs
@@ -111,3 +114,12 @@ export function randomizeIVs(): IVs {
 }
 
 // Random EVs
+export function randomizeEVs(): EVs {
+  const total = randomInteger(0, TOTAL_EV_LIMIT);
+
+  return randomizeStatDistribution(
+    total,
+    STAT_LIMITS.ev.min,
+    STAT_LIMITS.ev.max,
+  );
+}

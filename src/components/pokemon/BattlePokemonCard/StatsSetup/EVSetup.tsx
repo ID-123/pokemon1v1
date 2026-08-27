@@ -1,6 +1,7 @@
 import {
   calculateEVTotal,
   isValidEVs,
+  randomizeEVs,
   STAT_LIMITS,
   TOTAL_EV_LIMIT,
 } from "@/domain/pokemon";
@@ -17,6 +18,10 @@ export function EVSetup({ battlePokemon }: EVSetupProps) {
 
   const evTotal = calculateEVTotal(evs);
   const evsAreValid = isValidEVs(evs);
+
+  function handleRandomize() {
+    resetEV(randomizeEVs());
+  }
 
   function handleReset() {
     resetEV(DEFAULT_EVS);
@@ -57,8 +62,8 @@ export function EVSetup({ battlePokemon }: EVSetupProps) {
       <div className="mt-4 flex gap-3">
         <button
           type="button"
-          disabled
-          className="rounded-lg bg-blue-600 px-4 py-2 font-medium opacity-50"
+          onClick={handleRandomize}
+          className="rounded-lg bg-blue-600 px-4 py-2 font-medium transition hover:bg-blue-500"
         >
           Randomize EVs
         </button>
