@@ -1,9 +1,8 @@
 import {
-  calculateBST,
-  isValidBST,
   BASE_STAT_LIMITS,
   BST_LIMITS,
   randomizeBST,
+  getBSTInfo,
 } from "@/domain/pokemon";
 import type { PokemonSpecies } from "@/domain/pokemon";
 import type { BattlePokemonState } from "../hooks";
@@ -15,59 +14,13 @@ interface BaseStatsSetupProps {
   battlePokemon: BattlePokemonState;
 }
 
-interface BSTModalProps {
-  pokemonName: string;
-  bst: number;
-  maxBST: number;
-  bstIsValid: boolean;
-}
-
-export function BSTModal({
-  pokemonName,
-  bst,
-  maxBST,
-  bstIsValid,
-}: BSTModalProps) {
-  return (
-    <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800 p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <span className="text-sm text-slate-400">BST</span>
-          <p className="text-xs text-slate-500">{pokemonName}</p>
-        </div>
-
-        <span
-          className={`text-2xl font-bold ${
-            bstIsValid ? "text-white" : "text-red-400"
-          }`}
-        >
-          {bst} / {maxBST}
-        </span>
-      </div>
-
-      {!bstIsValid && (
-        <p className="mt-3 text-sm text-red-400">
-          ⚠ Las estadísticas superan el BST permitido para {pokemonName}.
-        </p>
-      )}
-
-      <p className="mt-2 text-xs text-slate-500">
-        Cada stat: {BASE_STAT_LIMITS.min}–{BASE_STAT_LIMITS.max}
-      </p>
-    </div>
-  );
-}
-
 export function BaseStatsSetup({
   pokemon,
   battlePokemon,
 }: BaseStatsSetupProps) {
   const { stats, updateStat, resetStats } = battlePokemon;
 
-  const bst = calculateBST(stats);
-  const maxBST = calculateBST(pokemon.baseStats);
-
-  const bstIsValid = isValidBST(bst, maxBST);
+  const { bst, bstIsValid } = getBSTInfo(stats, pokemon.baseStats);
   const canRandomizeBST = bstIsValid && bst >= BST_LIMITS.min;
 
   function handleRandomize() {

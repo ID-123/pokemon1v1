@@ -3,8 +3,9 @@ import { NatureSelector } from "./NatureSelector";
 import type { BattlePokemonState } from "../hooks";
 import { IVSetup } from "./IVSetup";
 import { EVSetup } from "./EVSetup";
-import { BaseStatsSetup, BSTModal } from "./BaseStatsSetup";
-import { calculateBST, isValidBST } from "@/domain/pokemon";
+import { BaseStatsSetup } from "./BaseStatsSetup";
+import { BSTModal } from "./BSTModal";
+import { getBSTInfo } from "@/domain/pokemon";
 interface StatRandomizerProps {
   pokemon: PokemonSpecies;
   battlePokemon: BattlePokemonState;
@@ -12,9 +13,10 @@ interface StatRandomizerProps {
 
 export function StatsSetup({ pokemon, battlePokemon }: StatRandomizerProps) {
   const { natureName, setNatureName } = battlePokemon;
-  const bst = calculateBST(battlePokemon.stats);
-  const maxBST = calculateBST(pokemon.baseStats);
-  const bstIsValid = isValidBST(bst, maxBST);
+  const { bst, maxBST, bstIsValid } = getBSTInfo(
+    battlePokemon.stats,
+    pokemon.baseStats,
+  );
   return (
     <div className="mx-auto w-full max-w-5xl rounded-2xl border border-slate-700 bg-slate-900 p-6 text-white shadow-lg">
       <section className="mt-2">

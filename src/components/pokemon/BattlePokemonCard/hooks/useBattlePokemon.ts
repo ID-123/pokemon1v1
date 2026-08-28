@@ -35,6 +35,15 @@ export function useBattlePokemon(pokemon: PokemonSpecies) {
 
   const finalStats = calculateFinalStats(stats, ivs, evs, nature, DEFAULT_LVL);
 
+  console.log({
+    baseStats: stats,
+    ivs,
+    evs,
+    natureName,
+    nature,
+    level: DEFAULT_LVL,
+  });
+
   return {
     stats,
     ivs,

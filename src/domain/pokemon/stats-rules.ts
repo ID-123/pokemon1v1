@@ -85,3 +85,11 @@ export function calculateIVTotal(ivs: IVs): number {
 export function isValidBST(bst: number, maxBST: number): boolean {
   return Number.isInteger(bst) && bst >= 0 && bst <= maxBST;
 }
+
+export function getBSTInfo(stats: BaseStats, maxBaseStats: BaseStats) {
+  const bst = calculateBST(stats);
+  const maxBST = calculateBST(maxBaseStats);
+  const bstIsValid = isValidBST(bst, maxBST);
+
+  return { bst, maxBST, bstIsValid };
+}
